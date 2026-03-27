@@ -1,188 +1,22 @@
 library(shiny)
 library(bslib)
 
-# ─── Evidence-based scoring data ──────────────────────────────────────────────
-# Each medication scored 1-5 per consideration (5 = best fit)
-# Sources: UpToDate Side Effects Table, MDD Initial Treatment, Antenatal SSRI Safety,
-#          Late-Life Depression, Pediatric Pharmacotherapy articles
+# ─── Load medication data from CSV ────────────────────────────────────────────
+medications <- read.csv("www/medications.csv", stringsAsFactors = FALSE)
 
-medications <- data.frame(
-  name = c(
-    "Sertraline", "Escitalopram", "Fluoxetine", "Citalopram",
-    "Paroxetine", "Bupropion", "Mirtazapine", "Duloxetine",
-    "Venlafaxine", "Vortioxetine", "Vilazodone", "Desvenlafaxine"
-  ),
-  class = c(
-    "SSRI", "SSRI", "SSRI", "SSRI",
-    "SSRI", "Atypical", "Atypical", "SNRI",
-    "SNRI", "Serotonin Modulator", "Serotonin Modulator", "SNRI"
-  ),
-  generic_score = c(
-    5, 5, 5, 4,
-    3, 4, 3, 4,
-    4, 4, 3, 3
-  ),
-  # ── Low Sexual Side Effects ──
-  # Inverse of UpToDate sexual dysfunction rating
-  # Bupropion (0) → 5, Mirtazapine (1+) → 4, Vortioxetine (1+) → 4
-  # SNRIs (1+) → 4, SSRIs (3+) → 2, Paroxetine (4+) → 1
-  sexual = c(
-    2,  # Sertraline: 3+ sexual dysfunction
-    2,  # Escitalopram: 3+
-    2,  # Fluoxetine: 3+
-    2,  # Citalopram: 3+
-    1,  # Paroxetine: 4+
-    5,  # Bupropion: 0
-    4,  # Mirtazapine: 1+
-    4,  # Duloxetine: 1+
-    2,  # Venlafaxine: 3+
-    4,  # Vortioxetine: 1+
-    4,  # Vilazodone: 1+
-    4   # Desvenlafaxine: 1+
-  ),
-  # ── Helpful for Sleep ──
-  # Based on drowsiness/sedation rating from UpToDate table
-  # Mirtazapine (4+) → 5, Paroxetine (2+) → 3, most SSRIs (1+) → 2
-  # Bupropion (0) → 1, Fluoxetine (0) → 1
-  sleep = c(
-    2,  # Sertraline: 1+ drowsiness
-    2,  # Escitalopram: 1+ drowsiness
-    1,  # Fluoxetine: 0 drowsiness, 2+ insomnia
-    2,  # Citalopram: 1+
-    3,  # Paroxetine: 2+
-    1,  # Bupropion: 0 drowsiness, 2+ insomnia
-    5,  # Mirtazapine: 4+ drowsiness
-    1,  # Duloxetine: 0, 1+ insomnia
-    1,  # Venlafaxine: 1+, 2+ insomnia
-    1,  # Vortioxetine: 0
-    1,  # Vilazodone: 0, 2+ insomnia
-    1   # Desvenlafaxine: 0, 2+ insomnia
-  ),
-  # ── Low Weight Gain ──
-  # Inverse of UpToDate weight gain rating
-  # Bupropion (0, may lose weight) → 5, Fluoxetine (0) → 5
-  # Mirtazapine (4+) → 1, Paroxetine (2+) → 2
-  weight = c(
-    4,  # Sertraline: 1+
-    4,  # Escitalopram: 1+
-    5,  # Fluoxetine: 0
-    4,  # Citalopram: 1+
-    2,  # Paroxetine: 2+
-    5,  # Bupropion: 0 (may cause weight loss)
-    1,  # Mirtazapine: 4+
-    4,  # Duloxetine: 0 to 1+
-    4,  # Venlafaxine: 0 to 1+
-    5,  # Vortioxetine: 0
-    5,  # Vilazodone: 0
-    3   # Desvenlafaxine: unknown
-  ),
-  # ── Helps with Anxiety ──
-  # SSRIs are first-line for anxiety disorders; bupropion generally avoided
-  anxiety = c(
-    5,  # Sertraline: preferred for anxiety
-    5,  # Escitalopram: preferred for anxiety
-    4,  # Fluoxetine: good for anxiety
-    4,  # Citalopram: good for anxiety
-    4,  # Paroxetine: good for anxiety
-    1,  # Bupropion: avoid in significant anxiety
-    3,  # Mirtazapine: some anxiolytic effect
-    4,  # Duloxetine: good for GAD
-    4,  # Venlafaxine: good for GAD
-    3,  # Vortioxetine: modest data
-    3,  # Vilazodone: modest data
-    3   # Desvenlafaxine: some data
-  ),
-  # ── Helps with Pain ──
-  # SNRIs (duloxetine especially) have evidence for neuropathic pain
-  pain = c(
-    2,  # Sertraline: minimal pain benefit
-    2,  # Escitalopram: minimal
-    2,  # Fluoxetine: minimal
-    2,  # Citalopram: minimal
-    2,  # Paroxetine: minimal
-    1,  # Bupropion: no pain benefit
-    2,  # Mirtazapine: some data
-    5,  # Duloxetine: FDA-approved for neuropathic pain
-    4,  # Venlafaxine: evidence for pain
-    1,  # Vortioxetine: no data
-    1,  # Vilazodone: no data
-    3   # Desvenlafaxine: some SNRI class benefit
-  ),
-  # ── More Energy / Less Sedation ──
-  # Inverse of drowsiness + consideration of activating properties
-  energy = c(
-    3,  # Sertraline: 1+ drowsiness, 2+ activation
-    3,  # Escitalopram: 1+ drowsiness, 1+ activation
-    4,  # Fluoxetine: 0 drowsiness, 2+ activation
-    3,  # Citalopram: 1+ drowsiness
-    2,  # Paroxetine: 2+ drowsiness
-    5,  # Bupropion: 0 drowsiness, activating
-    1,  # Mirtazapine: 4+ drowsiness
-    3,  # Duloxetine: 0 drowsiness
-    3,  # Venlafaxine: 1+ drowsiness
-    4,  # Vortioxetine: 0 drowsiness
-    3,  # Vilazodone: 0 drowsiness
-    3   # Desvenlafaxine: 0 drowsiness
-  ),
-  # ── Safer in Pregnancy ──
-  # Based on UpToDate antenatal SSRI/antidepressant review
-  # SSRIs as a class: not major teratogens; sertraline has most reassuring data
-  # Paroxetine: avoid (possible cardiac defect risk)
-  # Non-SSRIs: less data
-  pregnancy = c(
-    5,  # Sertraline: most data, commonly used in pregnancy
-    4,  # Escitalopram: reasonable safety data
-    4,  # Fluoxetine: extensive data, some concern re: long half-life
-    4,  # Citalopram: reasonable data
-    2,  # Paroxetine: avoid—possible cardiac defect risk
-    2,  # Bupropion: limited pregnancy data
-    2,  # Mirtazapine: limited data
-    2,  # Duloxetine: limited data
-    3,  # Venlafaxine: some data, no major teratogenicity signal
-    1,  # Vortioxetine: very limited data
-    1,  # Vilazodone: very limited data
-    1   # Desvenlafaxine: very limited data
-  ),
-  # ── Low GI Side Effects ──
-  # Inverse of GI toxicity rating from UpToDate table
-  gi = c(
-    2,  # Sertraline: 2+ GI (diarrhea common)
-    4,  # Escitalopram: 1+
-    4,  # Fluoxetine: 1+
-    4,  # Citalopram: 1+
-    4,  # Paroxetine: 1+
-    4,  # Bupropion: 1+
-    5,  # Mirtazapine: 0
-    3,  # Duloxetine: 2+
-    3,  # Venlafaxine: 2+
-    1,  # Vortioxetine: 3+
-    1,  # Vilazodone: 4+
-    3   # Desvenlafaxine: 2+
-  ),
-  # ── Easier to Stop (low discontinuation risk) ──
-  # Fluoxetine: longest half-life, easiest to stop
-  # Paroxetine & venlafaxine: worst discontinuation syndrome
-  discontinuation = c(
-    3,  # Sertraline: moderate
-    3,  # Escitalopram: moderate
-    5,  # Fluoxetine: long half-life, easiest
-    3,  # Citalopram: moderate
-    1,  # Paroxetine: worst discontinuation
-    4,  # Bupropion: relatively easy
-    4,  # Mirtazapine: relatively easy
-    2,  # Duloxetine: can be difficult
-    1,  # Venlafaxine: severe discontinuation
-    3,  # Vortioxetine: moderate
-    3,  # Vilazodone: moderate
-    1   # Desvenlafaxine: can be difficult
-  ),
-  stringsAsFactors = FALSE
-)
+# Convert score columns to numeric
+score_cols <- c("generic_score", "sexual", "sleep", "weight", "anxiety", "pain",
+                "energy", "pregnancy", "gi", "discontinuation", "interactions",
+                "pediatric", "older_adults", "breastfeeding")
+for (col in score_cols) {
+  medications[[col]] <- as.numeric(medications[[col]])
+}
 
 # ── Consideration metadata ────────────────────────────────────────────────────
 considerations <- data.frame(
   id = c("sexual", "sleep", "weight", "anxiety", "pain",
-         "energy", "pregnancy", "gi", "discontinuation"),
+         "energy", "pregnancy", "breastfeeding", "gi", "discontinuation",
+         "interactions", "pediatric", "older_adults"),
   label = c(
     "Low Sexual\nSide Effects",
     "Helpful\nfor Sleep",
@@ -191,19 +25,27 @@ considerations <- data.frame(
     "Helps with\nPain",
     "More\nEnergy",
     "Safer in\nPregnancy",
+    "Safer for\nBreastfeeding",
     "Low GI\nSide Effects",
-    "Easier\nto Stop"
+    "Easier\nto Stop",
+    "Fewer Drug\nInteractions",
+    "Better for\nPediatrics",
+    "Better for\nOlder Adults"
   ),
   icon = c(
-    "\U0001F496",   # heart
-    "\U0001F31B",   # moon
-    "\u2696\uFE0F", # scale
-    "\U0001F9D8",   # meditation
-    "\U0001F4AA",   # flexed bicep
-    "\u26A1",       # lightning bolt
-    "\U0001F930",   # pregnant
-    "\U0001F34E",   # apple (stomach)
-    "\U0001F513"    # unlocked
+    "\U0001F496",
+    "\U0001F31B",
+    "\u2696\uFE0F",
+    "\U0001F9D8",
+    "\U0001F4AA",
+    "\u26A1",
+    "\U0001F930",
+    "\U0001F931",
+    "\U0001F34E",
+    "\U0001F513",
+    "\U0001F48A",
+    "\U0001F9D2",
+    "\U0001F9D3"
   ),
   description = c(
     "Minimizes risk of decreased libido, difficulty with orgasm, or erectile dysfunction",
@@ -213,26 +55,14 @@ considerations <- data.frame(
     "Can help with chronic pain conditions, especially neuropathic pain",
     "Provides activating effects for fatigue, low energy, or hypersomnia",
     "Has the most reassuring safety data for use during pregnancy",
+    "Has the most reassuring safety data for use while breastfeeding",
     "Minimizes nausea, diarrhea, and other gastrointestinal side effects",
-    "Lower risk of withdrawal symptoms when discontinuing the medication"
+    "Lower risk of withdrawal symptoms when discontinuing the medication",
+    "Less likely to interfere with other medications you may be taking",
+    "Has evidence of efficacy and safety in children and adolescents",
+    "Well-suited for adults 65 and older, considering tolerability and safety"
   ),
   stringsAsFactors = FALSE
-)
-
-# ── Brief medication summaries ────────────────────────────────────────────────
-med_summaries <- c(
-  "Sertraline" = "A well-studied SSRI often considered first-line. Generally well-tolerated with the most pregnancy safety data among antidepressants.",
-  "Escitalopram" = "An SSRI known for good tolerability. Effective for both depression and anxiety with a relatively clean side-effect profile.",
-  "Fluoxetine" = "The longest-acting SSRI, making it easiest to stop. Also first-line for children/adolescents. Energizing and weight-neutral.",
-  "Citalopram" = "An SSRI similar to escitalopram. Note: doses limited to 20 mg/day in adults over 60 due to heart rhythm concerns.",
-  "Paroxetine" = "An SSRI that is mildly sedating but has higher rates of sexual side effects, weight gain, and discontinuation symptoms. Avoid in pregnancy.",
-  "Bupropion" = "An atypical antidepressant that is energizing, weight-neutral, and has no sexual side effects. Not helpful for anxiety or pain.",
-  "Mirtazapine" = "A sedating antidepressant that helps with sleep and appetite. Good for patients who need to gain weight. Causes the most weight gain.",
-  "Duloxetine" = "An SNRI with FDA approval for several pain conditions. Good choice when depression co-occurs with chronic pain.",
-  "Venlafaxine" = "An SNRI effective for depression, anxiety, and pain. Can raise blood pressure at higher doses. Difficult to discontinue.",
-  "Vortioxetine" = "A newer serotonin modulator with low sexual side effects. May improve cognitive symptoms of depression. Can cause significant nausea.",
-  "Vilazodone" = "A newer serotonin modulator with lower sexual side effects. Must be taken with food. Can cause significant GI side effects.",
-  "Desvenlafaxine" = "An SNRI (active metabolite of venlafaxine). Fewer drug interactions than venlafaxine but similar discontinuation concerns."
 )
 
 # ── UI ────────────────────────────────────────────────────────────────────────
@@ -265,7 +95,6 @@ ui <- page_fillable(
         color: var(--pp-text);
       }
 
-      /* ── Header ── */
       .app-header {
         background: linear-gradient(135deg, var(--pp-navy) 0%, var(--pp-teal) 100%);
         color: white;
@@ -292,7 +121,6 @@ ui <- page_fillable(
         line-height: 1.5;
       }
 
-      /* ── Consideration pills ── */
       .considerations-section {
         text-align: center;
         padding: 1.5rem 1rem 0.5rem;
@@ -310,8 +138,8 @@ ui <- page_fillable(
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        gap: 12px;
-        max-width: 900px;
+        gap: 10px;
+        max-width: 1050px;
         margin: 0 auto;
       }
 
@@ -320,8 +148,8 @@ ui <- page_fillable(
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        width: 110px;
-        padding: 14px 8px;
+        width: 100px;
+        padding: 12px 4px;
         background: var(--pp-white);
         border: 2px solid var(--pp-accent);
         border-radius: 16px;
@@ -347,24 +175,25 @@ ui <- page_fillable(
       }
 
       .consideration-btn .btn-icon {
-        font-size: 1.6rem;
-        margin-bottom: 6px;
+        font-size: 1.5rem;
+        margin-bottom: 5px;
         line-height: 1;
       }
 
       .consideration-btn .btn-label {
-        font-size: 0.72rem;
+        font-size: 0.67rem;
         font-weight: 600;
-        line-height: 1.3;
+        line-height: 1.25;
         white-space: pre-line;
         letter-spacing: 0.2px;
       }
 
-      /* ── Results area ── */
       .results-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
         padding: 1rem 1rem 0.5rem;
         max-width: 1100px;
         margin: 0 auto;
@@ -387,7 +216,7 @@ ui <- page_fillable(
         display: inline-block;
         background: var(--pp-teal);
         color: white;
-        font-size: 0.72rem;
+        font-size: 0.7rem;
         font-weight: 600;
         padding: 4px 10px;
         border-radius: 20px;
@@ -395,14 +224,13 @@ ui <- page_fillable(
 
       .med-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
         gap: 16px;
         padding: 0.5rem 1rem 2rem;
         max-width: 1100px;
         margin: 0 auto;
       }
 
-      /* ── Medication cards ── */
       .med-card {
         background: var(--pp-white);
         border-radius: 16px;
@@ -421,61 +249,92 @@ ui <- page_fillable(
       .med-card-header {
         background: linear-gradient(135deg, var(--pp-navy) 0%, var(--pp-teal) 100%);
         color: white;
-        padding: 1.1rem 1.2rem 0.8rem;
+        padding: 1rem 1.2rem 0.8rem;
         position: relative;
+      }
+
+      .med-card-header.top-match {
+        background: linear-gradient(135deg, #1a5c3a 0%, #2d8659 100%);
       }
 
       .med-card-header .class-badge {
         display: inline-block;
         background: rgba(255,255,255,0.2);
-        font-size: 0.68rem;
+        font-size: 0.65rem;
         font-weight: 700;
-        padding: 3px 10px;
+        padding: 2px 8px;
         border-radius: 20px;
         text-transform: uppercase;
         letter-spacing: 0.8px;
-        margin-bottom: 6px;
+        margin-bottom: 4px;
       }
 
       .med-card-header h4 {
         font-family: "Playfair Display", serif;
-        font-size: 1.35rem;
+        font-size: 1.3rem;
         font-weight: 700;
         margin: 0;
+        line-height: 1.2;
+      }
+
+      .med-card-header .brand-name {
+        font-size: 0.82rem;
+        opacity: 0.8;
+        font-style: italic;
+        margin-top: 2px;
       }
 
       .match-badge {
         position: absolute;
-        top: 12px;
-        right: 12px;
+        top: 10px;
+        right: 10px;
         background: var(--pp-gold);
         color: var(--pp-navy);
-        font-size: 0.72rem;
+        font-size: 0.7rem;
         font-weight: 800;
         padding: 4px 10px;
         border-radius: 20px;
         letter-spacing: 0.3px;
       }
 
+      .match-badge.top {
+        background: #f0c040;
+      }
+
       .med-card-body {
-        padding: 1rem 1.2rem;
+        padding: 0.9rem 1.2rem;
         flex: 1;
         display: flex;
         flex-direction: column;
       }
 
+      .med-meta {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 0.6rem;
+      }
+
+      .meta-item {
+        font-size: 0.75rem;
+        color: var(--pp-teal);
+        font-weight: 700;
+        background: #e8f4f0;
+        padding: 3px 10px;
+        border-radius: 8px;
+      }
+
       .med-summary {
-        font-size: 0.85rem;
+        font-size: 0.82rem;
         color: var(--pp-muted);
-        line-height: 1.55;
-        margin-bottom: 0.8rem;
+        line-height: 1.5;
+        margin-bottom: 0.7rem;
         flex: 1;
       }
 
       .score-bars {
         display: flex;
         flex-direction: column;
-        gap: 6px;
+        gap: 5px;
         margin-top: auto;
       }
 
@@ -486,10 +345,10 @@ ui <- page_fillable(
       }
 
       .score-label {
-        font-size: 0.7rem;
+        font-size: 0.68rem;
         font-weight: 600;
         color: var(--pp-muted);
-        width: 100px;
+        width: 110px;
         text-align: right;
         flex-shrink: 0;
         white-space: nowrap;
@@ -499,7 +358,7 @@ ui <- page_fillable(
 
       .score-bar-bg {
         flex: 1;
-        height: 8px;
+        height: 7px;
         background: #edf2f7;
         border-radius: 4px;
         overflow: hidden;
@@ -517,7 +376,6 @@ ui <- page_fillable(
       .fill-2 { background: #e0a886; width: 40%; }
       .fill-1 { background: #d9838a; width: 20%; }
 
-      /* ── Disclaimer ── */
       .disclaimer {
         max-width: 800px;
         margin: 0 auto 2rem;
@@ -536,29 +394,14 @@ ui <- page_fillable(
         margin-bottom: 4px;
         font-size: 0.88rem;
       }
-
-      /* ── No-selection state ── */
-      .empty-state {
-        text-align: center;
-        padding: 3rem 1rem;
-        color: var(--pp-muted);
-      }
-
-      .empty-state .icon {
-        font-size: 3rem;
-        margin-bottom: 1rem;
-        opacity: 0.5;
-      }
     '))
   ),
 
-  # ── Header ──
   div(class = "app-header",
     tags$h1("Find Your Antidepressant"),
     tags$p("Everyone\u2019s needs are different. Select what matters most to you, and we\u2019ll show you which medications may be the best fit. This tool is for informational purposes\u2014always discuss options with your doctor.")
   ),
 
-  # ── Consideration buttons ──
   div(class = "considerations-section",
     tags$h3("Pick what\u2019s important to you:"),
     div(class = "consideration-grid",
@@ -575,14 +418,12 @@ ui <- page_fillable(
     )
   ),
 
-  # ── Results ──
   uiOutput("results_header"),
   uiOutput("medication_cards"),
 
-  # ── Disclaimer ──
   div(class = "disclaimer",
     tags$strong("\u26A0\uFE0F This tool is for educational purposes only"),
-    "It does not replace professional medical advice. Antidepressant selection should always be discussed with a healthcare provider who knows your full medical history. Scores are based on published clinical evidence from UpToDate and peer-reviewed literature."
+    "It does not replace professional medical advice. Antidepressant selection should always be discussed with a healthcare provider who knows your full medical history. Scores are based on published clinical evidence from UpToDate and peer-reviewed literature. Cost estimates are approximate with a GoodRx coupon and may vary by pharmacy and location."
   )
 )
 
@@ -590,17 +431,14 @@ ui <- page_fillable(
 
 server <- function(input, output, session) {
 
-  # Track which considerations are active
   active <- reactiveValues()
   for (cid in considerations$id) {
     active[[cid]] <- FALSE
   }
 
-  # Toggle handlers
   lapply(considerations$id, function(cid) {
     observeEvent(input[[paste0("toggle_", cid)]], {
       active[[cid]] <- !active[[cid]]
-      # Update CSS class
       if (active[[cid]]) {
         session$sendCustomMessage("addClass", list(id = paste0("btn_", cid), cls = "active"))
       } else {
@@ -609,7 +447,6 @@ server <- function(input, output, session) {
     }, ignoreInit = TRUE)
   })
 
-  # Compute active consideration IDs
   active_ids <- reactive({
     ids <- c()
     for (cid in considerations$id) {
@@ -618,7 +455,6 @@ server <- function(input, output, session) {
     ids
   })
 
-  # Compute ranked medications
   ranked_meds <- reactive({
     sel <- active_ids()
     df <- medications
@@ -627,8 +463,7 @@ server <- function(input, output, session) {
       df$total_score <- df$generic_score
       df$match_pct <- NA
     } else {
-      score_cols <- sel
-      df$total_score <- rowSums(df[, score_cols, drop = FALSE])
+      df$total_score <- rowSums(df[, sel, drop = FALSE])
       max_possible <- length(sel) * 5
       df$match_pct <- round(df$total_score / max_possible * 100)
     }
@@ -637,7 +472,6 @@ server <- function(input, output, session) {
     df
   })
 
-  # Results header
   output$results_header <- renderUI({
     sel <- active_ids()
     sel_labels <- considerations$label[match(sel, considerations$id)]
@@ -646,7 +480,7 @@ server <- function(input, output, session) {
     div(class = "results-header",
       div(class = "results-count",
         if (length(sel) == 0) {
-          "Showing all 12 medications"
+          paste0("Showing all ", nrow(medications), " medications")
         } else {
           paste0("Ranked by your ", length(sel), " selection", ifelse(length(sel) > 1, "s", ""))
         }
@@ -661,26 +495,33 @@ server <- function(input, output, session) {
     )
   })
 
-  # Medication cards
   output$medication_cards <- renderUI({
     df <- ranked_meds()
     sel <- active_ids()
+    top_score <- if (nrow(df) > 0 && length(sel) > 0) df$total_score[1] else NA
 
     div(class = "med-grid",
       lapply(1:nrow(df), function(i) {
         row <- df[i, ]
-        summary_text <- med_summaries[row$name]
+        is_top <- !is.na(top_score) && row$total_score == top_score
 
         div(class = "med-card",
-          div(class = "med-card-header",
+          div(class = paste0("med-card-header", ifelse(is_top, " top-match", "")),
             span(class = "class-badge", row$class),
             if (!is.na(row$match_pct)) {
-              span(class = "match-badge", paste0(row$match_pct, "% Match"))
+              span(class = paste0("match-badge", ifelse(is_top, " top", "")),
+                if (is_top) "\u2B50 " else "",
+                paste0(row$match_pct, "% Match")
+              )
             },
-            tags$h4(row$name)
+            tags$h4(row$name),
+            div(class = "brand-name", row$brand_name)
           ),
           div(class = "med-card-body",
-            div(class = "med-summary", summary_text),
+            div(class = "med-meta",
+              span(class = "meta-item", paste0("\U0001F4B2 ", row$cost_estimate, "/mo"))
+            ),
+            div(class = "med-summary", row$summary),
             if (length(sel) > 0) {
               div(class = "score-bars",
                 lapply(sel, function(cid) {
@@ -702,8 +543,6 @@ server <- function(input, output, session) {
   })
 }
 
-# ── JavaScript for class toggling ─────────────────────────────────────────────
-# We inject this via the UI since Shiny needs it available at page load
 ui <- tagList(
   ui,
   tags$script(HTML('
