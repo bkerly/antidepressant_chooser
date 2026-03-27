@@ -239,11 +239,67 @@ ui <- page_fillable(
         transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         display: flex;
         flex-direction: column;
+        cursor: pointer;
       }
 
       .med-card:hover {
         transform: translateY(-3px);
         box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+      }
+
+      .expand-hint {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        padding: 6px 0 2px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: var(--pp-teal);
+        opacity: 0.7;
+        transition: opacity 0.2s;
+      }
+
+      .med-card:hover .expand-hint {
+        opacity: 1;
+      }
+
+      .expand-hint .chevron {
+        display: inline-block;
+        transition: transform 0.3s ease;
+        font-size: 0.8rem;
+      }
+
+      .med-card.expanded .expand-hint .chevron {
+        transform: rotate(180deg);
+      }
+
+      .med-card.expanded .expand-hint .hint-text {
+        display: none;
+      }
+
+      .all-scores {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                    padding 0.3s ease;
+        padding: 0 1.2rem;
+      }
+
+      .med-card.expanded .all-scores {
+        max-height: 600px;
+        padding: 0.5rem 1.2rem 1rem;
+      }
+
+      .all-scores-title {
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: var(--pp-navy);
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        margin-bottom: 8px;
+        padding-top: 8px;
+        border-top: 1px solid #edf2f7;
       }
 
       .med-card-header {
@@ -499,13 +555,20 @@ server <- function(input, output, session) {
     df <- ranked_meds()
     sel <- active_ids()
     top_score <- if (nrow(df) > 0 && length(sel) > 0) df$total_score[1] else NA
+    all_cids <- considerations$id
 
     div(class = "med-grid",
       lapply(1:nrow(df), function(i) {
         row <- df[i, ]
         is_top <- !is.na(top_score) && row$total_score == top_score
+        card_id <- paste0("card_", gsub("[^a-zA-Z]", "", row$name))
 
-        div(class = "med-card",
+        # Determine which scores to show in the expanded section
+        # (all scores minus the ones already visible from active filters)
+        expanded_cids <- setdiff(all_cids, sel)
+
+        div(class = "med-card", id = card_id,
+          onclick = sprintf("this.classList.toggle('expanded')"),
           div(class = paste0("med-card-header", ifelse(is_top, " top-match", "")),
             span(class = "class-badge", row$class),
             if (!is.na(row$match_pct)) {
@@ -535,7 +598,29 @@ server <- function(input, output, session) {
                   )
                 })
               )
-            }
+            },
+            div(class = "expand-hint",
+              span(class = "hint-text", "Tap to see all scores"),
+              span(class = "chevron", "\u25BC")
+            )
+          ),
+          # Expandable section with remaining scores
+          div(class = "all-scores",
+            div(class = "all-scores-title",
+              if (length(sel) > 0) "All Other Scores" else "All Scores"
+            ),
+            div(class = "score-bars",
+              lapply(expanded_cids, function(cid) {
+                score <- row[[cid]]
+                label <- gsub("\n", " ", considerations$label[considerations$id == cid])
+                div(class = "score-row",
+                  span(class = "score-label", label),
+                  div(class = "score-bar-bg",
+                    div(class = paste0("score-bar-fill fill-", score))
+                  )
+                )
+              })
+            )
           )
         )
       })
