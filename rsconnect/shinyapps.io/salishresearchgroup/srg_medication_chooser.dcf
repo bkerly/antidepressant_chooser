@@ -1,0 +1,12 @@
+name: srg_medication_chooser
+title: srg_medication_chooser
+username: salishresearchgroup
+account: salishresearchgroup
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 17828289
+bundleId: 12508536
+url: https://salishresearchgroup.shinyapps.io/srg_medication_chooser/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE

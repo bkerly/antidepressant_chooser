@@ -796,7 +796,7 @@ ui <- do.call(page_navbar, c(nav_panels, list(
         "be discussed with a healthcare provider who knows your full medical history.",
         "Scores are based on published clinical evidence from UpToDate and peer-reviewed",
         "literature. Cost estimates are approximate with a GoodRx coupon and may vary by",
-        "pharmacy and location."
+        "insurance coverage, pharmacy, and location."
       )
     ),
     tags$script(app_js)
