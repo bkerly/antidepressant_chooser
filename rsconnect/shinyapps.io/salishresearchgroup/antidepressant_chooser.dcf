@@ -1,0 +1,10 @@
+name: antidepressant_chooser
+title:
+username: salishresearchgroup
+account: salishresearchgroup
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 17003603
+bundleId: 11771056
+url: https://salishresearchgroup.shinyapps.io/antidepressant_chooser/
+version: 1

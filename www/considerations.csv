@@ -1,0 +1,38 @@
+domain,id,label,icon,description
+depression,sexual,Low Sexual|Side Effects,1F496,"Minimizes risk of decreased libido, difficulty with orgasm, or erectile dysfunction"
+depression,sleep,Helpful|for Sleep,1F31B,Provides sedation that can help with insomnia and sleep difficulties
+depression,weight,Low Weight|Gain,2696 FE0F,Minimizes risk of weight gain during treatment
+depression,anxiety,Helps with|Anxiety,1F9D8,Effective for co-occurring anxiety symptoms and anxiety disorders
+depression,pain,Helps with|Pain,1F4AA,"Can help with chronic pain conditions, especially neuropathic pain"
+depression,energy,More|Energy,26A1,"Provides activating effects for fatigue, low energy, or hypersomnia"
+depression,pregnancy,Safer in|Pregnancy,1F930,Has the most reassuring safety data for use during pregnancy
+depression,breastfeeding,Safer for|Breastfeeding,1F931,Has the most reassuring safety data for use while breastfeeding
+depression,gi,Low GI|Side Effects,1F34E,"Minimizes nausea, diarrhea, and other gastrointestinal side effects"
+depression,discontinuation,Easier|to Stop,1F513,Lower risk of withdrawal symptoms when discontinuing the medication
+depression,interactions,Fewer Drug|Interactions,1F48A,Less likely to interfere with other medications you may be taking
+depression,pediatric,Better for|Pediatrics,1F9D2,Has evidence of efficacy and safety in children and adolescents
+depression,older_adults,Better for|Older Adults,1F9D3,"Well-suited for adults 65 and older, considering tolerability and safety"
+anxiety,evidence,Strongest|Evidence,1F4D6,Has the most randomized trial evidence for this particular anxiety condition
+anxiety,as_needed,Works Fast|As Needed,26A1,"Starts working within hours, so it can be taken before a speech, flight, or exam rather than every day"
+anxiety,sexual,Low Sexual|Side Effects,1F496,"Minimizes risk of decreased libido, difficulty with orgasm, or erectile dysfunction"
+anxiety,sleep,Helpful|for Sleep,1F31B,Provides sedation that can help with insomnia and night-time worry
+anxiety,alert,Low Daytime|Drowsiness,2600 FE0F,Less likely to cause sedation or slowed thinking during the day
+anxiety,weight,Low Weight|Gain,2696 FE0F,Minimizes risk of weight gain during treatment
+anxiety,no_dependence,No Dependence|or Misuse,1F6E1 FE0F,"No tolerance or physical dependence with continued use, and low misuse potential for people with a history of substance use"
+anxiety,discontinuation,Easier|to Stop,1F513,Lower risk of withdrawal symptoms when discontinuing the medication
+anxiety,interactions,Fewer Drug|Interactions,1F48A,Less likely to interfere with other medications you may be taking
+anxiety,gi,Low GI|Side Effects,1F34E,"Minimizes nausea, diarrhea, and other gastrointestinal side effects"
+anxiety,pregnancy,Safer in|Pregnancy,1F930,Has the more reassuring safety data for use during pregnancy
+anxiety,depression,Also Treats|Depression,1F324 FE0F,Effective for co-occurring depression rather than anxiety alone
+anxiety,older_adults,Better for|Older Adults,1F9D3,"Well-suited for adults 65 and older, considering falls, confusion, and tolerability"
+lipids,ldl_lowering,Large LDL|Reduction,1F4C9,Lowers LDL cholesterol the most in absolute percentage terms
+lipids,outcomes,Proven Event|Reduction,1FAC0,Randomized trial evidence that it prevents heart attacks and strokes in primary prevention
+lipids,cost,Low|Cost,1F4B2,Inexpensive and widely covered
+lipids,muscle,Low Muscle|Symptoms,1F4AA,"Less likely to cause muscle aches, cramps, or weakness, the commonest reason people stop treatment"
+lipids,cognitive,Low Memory|Complaints,1F9E0,Less likely to be linked to fuzzy thinking or memory complaints; randomized trials have not confirmed a real effect for any of these
+lipids,diabetes,No Diabetes|Risk,1FA78,Does not increase the chance of developing type 2 diabetes
+lipids,gi,Low GI|Side Effects,1F34E,"Minimizes constipation, dyspepsia, nausea, and other gastrointestinal side effects"
+lipids,oral,Pill|Not Injection,1F48A,Taken by mouth rather than by injection
+lipids,interactions,Fewer Drug|Interactions,1F517,Less likely to interfere with other medications you may be taking
+lipids,pregnancy,Usable in|Pregnancy,1F930,Can be continued or started while pregnant or trying to conceive
+lipids,older_adults,Better for|Older Adults,1F9D3,"Well-suited for adults 75 and older, considering evidence and tolerability"

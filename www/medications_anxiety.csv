@@ -1,0 +1,39 @@
+name,brand_name,class,subtype,cost_estimate,default_score,summary,evidence,as_needed,sexual,sleep,alert,weight,no_dependence,discontinuation,interactions,gi,pregnancy,depression,older_adults
+Escitalopram,Lexapro,SSRI,panic,$4-12,5,"A first-line choice for panic. Start at 5 mg, half the usual depression dose, because panic makes people unusually sensitive to early overstimulation.",5,1,2,3,4,3,5,3,4,3,4,5,4
+Escitalopram,Lexapro,SSRI,gad,$4-12,5,"A first-line choice for generalized anxiety, with placebo-controlled trial support and few drug interactions.",5,1,2,3,4,3,5,3,4,3,4,5,4
+Sertraline,Zoloft,SSRI,panic,$4-12,5,A first-line choice for panic. Start at 25 mg and titrate slowly; more diarrhea and early agitation than most SSRIs.,5,1,2,2,5,4,5,3,5,2,5,5,5
+Sertraline,Zoloft,SSRI,gad,$4-12,5,"A first-line choice for generalized anxiety, with the most reassuring pregnancy data and very few interactions.",5,1,2,2,5,4,5,3,5,2,5,5,5
+Paroxetine,Paxil,SSRI,panic,$4-15,5,"Effective for panic and mildly sedating, which some people prefer early on. Withdrawal is difficult without a slow taper.",5,1,1,4,3,2,5,1,2,3,2,5,2
+Paroxetine,Paxil,SSRI,gad,$4-15,5,"The most extensively trialled SSRI for generalized anxiety. Weight gain, sexual side effects, and withdrawal are the main drawbacks.",5,1,1,4,3,2,5,1,2,3,2,5,2
+Fluoxetine,Prozac,SSRI,panic,$4-12,5,"Effective for panic but activating, so start at 5 mg. The long half-life means missed doses and stopping are far more forgiving.",5,1,2,1,5,4,5,5,1,3,4,5,3
+Fluoxetine,Prozac,SSRI,gad,$4-12,4,Widely used for generalized anxiety on the strength of open trials and practice rather than placebo-controlled trials.,4,1,2,1,5,4,5,5,1,3,4,5,3
+Citalopram,Celexa,SSRI,panic,$4-12,5,"Effective for panic with few interactions. Doses above 40 mg, or 20 mg over age 60, raise QT-interval concerns.",5,1,2,3,4,2,5,3,4,3,4,5,3
+Citalopram,Celexa,SSRI,gad,$4-12,5,"Effective for generalized anxiety with few interactions, but more weight gain than fluoxetine and a dose ceiling for QT.",5,1,2,3,4,2,5,3,4,3,4,5,3
+Fluvoxamine,Luvox,SSRI,panic,$10-25,5,"Trial-proven for panic and less activating than most SSRIs, but it inhibits CYP1A2 and 2C19 and interacts widely.",5,1,2,3,4,3,5,2,1,2,3,4,2
+Fluvoxamine,Luvox,SSRI,gad,$10-25,3,Used for generalized anxiety mostly by extension from other anxiety disorders. Significant drug interactions.,3,1,2,3,4,3,5,2,1,2,3,4,2
+Venlafaxine ER,Effexor XR,SNRI,panic,$8-20,4,The usual next step after two SSRIs fail in panic. Use the extended-release form only; monitor blood pressure at every visit.,4,1,2,2,5,4,5,1,5,2,3,5,2
+Venlafaxine ER,Effexor XR,SNRI,gad,$8-20,5,A first-line option for generalized anxiety with efficacy shown out to six months. Blood pressure rises at higher doses.,5,1,2,2,5,4,5,1,5,2,3,5,2
+Duloxetine,Cymbalta,SNRI,panic,$8-20,2,Not typically used for panic; there are no randomized trials and very few open-label studies in this condition.,2,1,3,2,5,4,5,2,3,2,3,5,3
+Duloxetine,Cymbalta,SNRI,gad,$8-20,5,"A first-line option for generalized anxiety, and the usual pick when sexual side effects are the main worry.",5,1,3,2,5,4,5,2,3,2,3,5,3
+Buspirone,BuSpar,Azapirone,panic,$4-15,1,Randomized trials have not supported buspirone for panic disorder. Consider it only if the diagnosis is in question.,1,1,5,2,4,5,5,5,3,4,3,1,4
+Buspirone,BuSpar,Azapirone,gad,$4-15,4,"The preferred add-on for a partial response in generalized anxiety. No dependence or withdrawal, but slow onset and modest effect.",4,1,5,2,4,5,5,5,3,4,3,1,4
+Gabapentin,Neurontin,GABA analog,panic,$4-15,3,"Used alongside an SSRI for early distress when a benzodiazepine is unwise, especially with a substance use history. Works within days.",3,3,5,4,2,2,3,3,5,4,3,1,3
+Gabapentin,Neurontin,GABA analog,gad,$4-15,3,A reasonable third-line option in generalized anxiety and the preferred bridge in people with a substance use history.,3,3,5,4,2,2,3,3,5,4,3,1,3
+Pregabalin,Lyrica,GABA analog,panic,$8-25,2,An alternative to gabapentin with a similar profile. Schedule V in the US and more misuse concern.,2,3,5,4,2,2,2,2,5,4,2,1,2
+Pregabalin,Lyrica,GABA analog,gad,$8-25,3,Approved for anxiety outside the US and effective in trials. Most people need above 150 mg/day. Sedation and dizziness are common.,3,3,5,4,2,2,2,2,5,4,2,1,2
+Mirtazapine,Remeron,Atypical antidepressant,panic,$4-15,2,"Used as an add-on for panic with insomnia, on the strength of case reports and open trials rather than randomized data.",2,2,4,5,1,1,5,4,4,4,3,5,3
+Mirtazapine,Remeron,Atypical antidepressant,gad,$4-15,2,An option for generalized anxiety with prominent insomnia. Trial evidence is thin; sedation and appetite are the trade-off.,2,2,4,5,1,1,5,4,4,4,3,5,3
+Hydroxyzine,Vistaril,Antihistamine,panic,$4-12,1,Not studied in panic disorder. Its sedation may blunt an attack but it does not treat the underlying condition.,1,5,5,5,1,4,5,5,5,5,3,1,1
+Hydroxyzine,Vistaril,Antihistamine,gad,$4-12,3,"Works within an hour and carries no dependence risk, so it is the usual bridge when a benzodiazepine is off the table. Meta-analysis quality is poor.",3,5,5,5,1,4,5,5,5,5,3,1,1
+Vilazodone,Viibryd,Serotonin modulator,panic,$15-40,1,No randomized trials in panic disorder.,1,1,4,2,4,4,5,3,3,2,2,5,3
+Vilazodone,Viibryd,Serotonin modulator,gad,$15-40,3,"As effective as other serotonin reuptake inhibitors in generalized anxiety, with possibly less sexual dysfunction and more nausea.",3,1,4,2,4,4,5,3,3,2,2,5,3
+Clonazepam,Klonopin,Benzodiazepine,panic,$4-12,5,"FDA-approved for panic and effective within the first week. Reserved for early distress or partial response, then tapered over 10 to 12 weeks.",5,4,4,5,2,4,1,1,3,5,2,1,1
+Clonazepam,Klonopin,Benzodiazepine,gad,$4-12,4,"Effective and fast, but held back until other options are exhausted because of dependence, falls, and cognitive effects.",4,4,4,5,2,4,1,1,3,5,2,1,1
+Lorazepam,Ativan,Benzodiazepine,panic,$4-12,4,"Effective in trials and fast, but the short half-life brings interdose rebound and a harder taper than clonazepam. Best kept for as-needed use or a short bridge.",4,5,4,5,2,4,1,1,5,5,2,1,2
+Lorazepam,Ativan,Benzodiazepine,gad,$4-12,4,"The suggested short-term cover for early SSRI agitation and insomnia at 1 to 2 mg a day, then tapered by 25 percent a week. Not a long-term answer.",4,5,4,5,2,4,1,1,5,5,2,1,2
+Imipramine,Tofranil,Tricyclic,panic,$10-25,4,"Sixteen trials support tricyclics for panic, though most used imipramine while nortriptyline is better tolerated. Cardiotoxic in overdose.",4,1,2,4,2,2,5,2,3,3,3,5,1
+Imipramine,Tofranil,Tricyclic,gad,$10-25,3,"Effective for generalized anxiety, including without comorbid depression, but reserved because of overdose risk and tolerability.",3,1,2,4,2,2,5,2,3,3,3,5,1
+Quetiapine,Seroquel,Second-generation antipsychotic,panic,$6-20,1,A controlled augmentation trial in SSRI-resistant panic found no benefit over placebo.,1,2,3,5,1,1,4,4,3,4,2,3,1
+Quetiapine,Seroquel,Second-generation antipsychotic,gad,$6-20,3,"Randomized trials support it for refractory generalized anxiety, but metabolic effects, sedation, and tardive dyskinesia keep it last.",3,2,3,5,1,1,4,4,3,4,2,3,1
+Propranolol,Inderal,Beta blocker,panic,$4-15,1,Trials have not found beta blockers effective for panic disorder. It blunts palpitations and tremor without touching the fear that drives them.,1,5,3,2,4,3,5,3,4,5,3,1,3
+Propranolol,Inderal,Beta blocker,gad,$4-15,2,"Weak evidence as a daily treatment for generalized anxiety, but a single dose before a specific event is where it earns its place.",2,5,3,2,4,3,5,3,4,5,3,1,3
