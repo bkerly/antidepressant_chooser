@@ -54,6 +54,31 @@ conditions <- list(
                  "High intensity" = "high"),
     subtype_label = "How much LDL reduction do you need?",
     subtype_default = "moderate"
+  ),
+  hypertension = list(
+    nav      = "Blood Pressure",
+    title    = "Find Your Blood Pressure Medication",
+    blurb    = paste(
+      "Stage 1 is usually treated with one drug; stage 2 usually starts with two,",
+      "preferably in a single pill. Pick the stage first, then choose what matters most to you."
+    ),
+    file     = "www/medications_hypertension.csv",
+    subtypes = c("Stage 1 (130-139 / 80-89)" = "stage1",
+                 "Stage 2 (140-180 / 90-120)" = "stage2"),
+    subtype_label = "What is the starting blood pressure?",
+    subtype_default = "stage2"
+  ),
+  contraception = list(
+    nav      = "Birth Control",
+    title    = "Find Your Birth Control",
+    blurb    = paste(
+      "There is no best method, only the one that fits what you care about.",
+      "Start with everything, or narrow to daily pills if that is the shape you want."
+    ),
+    file     = "www/medications_contraception.csv",
+    subtypes = c("All methods" = "all", "Daily pills only" = "pills"),
+    subtype_label = "What are you comparing?",
+    subtype_default = "all"
   )
 )
 
@@ -344,6 +369,18 @@ app_css <- HTML('
     --pp-teal: #7A4A56;
     --pp-teal-light: #B07C86;
     --pp-tint: #F6ECEE;
+  }
+  .cond-hypertension {
+    --pp-navy: #24402F;
+    --pp-teal: #3E6B52;
+    --pp-teal-light: #7FAE90;
+    --pp-tint: #EAF2ED;
+  }
+  .cond-contraception {
+    --pp-navy: #3A2A4A;
+    --pp-teal: #6B4A7A;
+    --pp-teal-light: #A98BB8;
+    --pp-tint: #F1ECF5;
   }
 
   body {
@@ -796,7 +833,7 @@ ui <- do.call(page_navbar, c(nav_panels, list(
         "be discussed with a healthcare provider who knows your full medical history.",
         "Scores are based on published clinical evidence from UpToDate and peer-reviewed",
         "literature. Cost estimates are approximate with a GoodRx coupon and may vary by",
-        "insurance coverage, pharmacy, and location."
+        "pharmacy and location."
       )
     ),
     tags$script(app_js)

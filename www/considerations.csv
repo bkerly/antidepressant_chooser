@@ -5,6 +5,7 @@ depression,weight,Low Weight|Gain,2696 FE0F,Minimizes risk of weight gain during
 depression,anxiety,Helps with|Anxiety,1F9D8,Effective for co-occurring anxiety symptoms and anxiety disorders
 depression,pain,Helps with|Pain,1F4AA,"Can help with chronic pain conditions, especially neuropathic pain"
 depression,energy,More|Energy,26A1,"Provides activating effects for fatigue, low energy, or hypersomnia"
+depression,seasonal,Works for|Winter SAD,2744 FE0F,"Has direct trial evidence in winter seasonal affective disorder, or is a treatment specific to it"
 depression,pregnancy,Safer in|Pregnancy,1F930,Has the most reassuring safety data for use during pregnancy
 depression,breastfeeding,Safer for|Breastfeeding,1F931,Has the most reassuring safety data for use while breastfeeding
 depression,gi,Low GI|Side Effects,1F34E,"Minimizes nausea, diarrhea, and other gastrointestinal side effects"
@@ -25,7 +26,6 @@ anxiety,gi,Low GI|Side Effects,1F34E,"Minimizes nausea, diarrhea, and other gast
 anxiety,pregnancy,Safer in|Pregnancy,1F930,Has the more reassuring safety data for use during pregnancy
 anxiety,depression,Also Treats|Depression,1F324 FE0F,Effective for co-occurring depression rather than anxiety alone
 anxiety,older_adults,Better for|Older Adults,1F9D3,"Well-suited for adults 65 and older, considering falls, confusion, and tolerability"
-lipids,ldl_lowering,Large LDL|Reduction,1F4C9,Lowers LDL cholesterol the most in absolute percentage terms
 lipids,outcomes,Proven Event|Reduction,1FAC0,Randomized trial evidence that it prevents heart attacks and strokes in primary prevention
 lipids,cost,Low|Cost,1F4B2,Inexpensive and widely covered
 lipids,muscle,Low Muscle|Symptoms,1F4AA,"Less likely to cause muscle aches, cramps, or weakness, the commonest reason people stop treatment"
@@ -36,3 +36,29 @@ lipids,oral,Pill|Not Injection,1F48A,Taken by mouth rather than by injection
 lipids,interactions,Fewer Drug|Interactions,1F517,Less likely to interfere with other medications you may be taking
 lipids,pregnancy,Usable in|Pregnancy,1F930,Can be continued or started while pregnant or trying to conceive
 lipids,older_adults,Better for|Older Adults,1F9D3,"Well-suited for adults 75 and older, considering evidence and tolerability"
+hypertension,first_line,Preferred|First Choice,1F947,Guideline-preferred as an opening move at this blood pressure stage
+hypertension,outcomes,Proven Event|Reduction,1FAC0,"Randomized trial evidence that it prevents heart attacks, strokes, and kidney disease"
+hypertension,cost,Low|Cost,1F4B2,Inexpensive and widely stocked
+hypertension,simple_dosing,One Pill|Once Daily,1F5D3 FE0F,"A single tablet taken once a day, which is the strongest predictor of staying on treatment"
+hypertension,pregnancy,Safe if Pregnancy|Possible,1F930,Can be used by someone who is pregnant or may become pregnant
+hypertension,kidney,Better with|Kidney Disease,1F4A7,Preferred when there is chronic kidney disease with protein in the urine
+hypertension,heart_failure,Helps|Heart Failure,2764 FE0F,"Also treats heart failure, so one drug covers both conditions"
+hypertension,afib,Helps Control|Heart Rate,1F493,Also slows the heart rate in atrial fibrillation
+hypertension,asthma,Safe with|Asthma or COPD,1FAC1,"Does not narrow the airways, so it is safe in asthma or chronic lung disease"
+hypertension,orthostatic,Low Dizziness|on Standing,1F9CD,Less likely to cause or worsen a blood pressure drop on standing up
+hypertension,cough,No Cough|or Angioedema|Risk,1F5E3 FE0F,"Avoids the dry cough and the rare but dangerous lip, tongue, or airway swelling that ACE inhibitors can cause"
+hypertension,edema,Low Ankle|Swelling,1F9B6,Less likely to cause fluid in the ankles
+hypertension,urination,No Extra|Urination,1F6BD,Does not increase urination or require regular electrolyte and kidney blood tests
+hypertension,older_adults,Better for|Older Adults,1F9D3,"Well-suited to adults over 75, considering falls, frailty, and slow titration"
+contraception,effectiveness,Most|Effective,1F3AF,"How few people get pregnant in a year of real-world use, not perfect use"
+contraception,no_daily,Nothing to|Remember Daily,1F4C6,"Works without a pill, a patch change, or anything to do before sex"
+contraception,self_stop,Start and Stop|On Your Own,1F513,No clinician visit or procedure needed to begin or to quit
+contraception,no_hormones,Hormone|Free,1F33F,Contains no hormones at all
+contraception,no_estrogen,Estrogen|Free,1F6AB,"Usable with a clot history, migraine with aura, or high blood pressure"
+contraception,lighter,Lighter or|No Periods,1FA78,Makes bleeding lighter or stops it altogether
+contraception,predictable,Predictable|Bleeding,1F504,"Keeps a regular, expected bleeding pattern rather than spotting at random"
+contraception,quick_return,Fast Return|to Fertility,1F476,Fertility comes back within a cycle or so after stopping
+contraception,private,Private and|Unnoticeable,1F92B,Nobody else can tell you are using it
+contraception,sti,Protects|Against STIs,1F6E1 FE0F,Also reduces the risk of sexually transmitted infection
+contraception,cramps_acne,Helps Cramps|or Acne,1F338,"Has benefits beyond contraception, such as lighter cramps, less acne, or milder PMS"
+contraception,cost,Low|Cost,1F4B2,"Inexpensive, and usually covered without a copay"

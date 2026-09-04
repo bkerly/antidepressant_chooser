@@ -4,8 +4,8 @@ A Shiny app that ranks medications against what a particular patient cares about
 Each drug is scored 1 to 5 on every consideration that plausibly drives selection.
 The user taps the considerations that matter to them and the ranking recomputes.
 
-Three conditions are covered: depression, anxiety, and LDL cholesterol lowering for
-primary prevention.
+Five conditions are covered: depression, anxiety, LDL cholesterol lowering for
+primary prevention, initial treatment of hypertension, and contraception.
 
 Live at <https://salishresearchgroup.shinyapps.io/antidepressant_chooser/>
 
@@ -27,6 +27,8 @@ recommend, and it does not know anything about the person using it.
     www/medications.csv            depression
     www/medications_anxiety.csv    anxiety
     www/medications_lipids.csv     LDL lowering
+    www/medications_hypertension.csv  blood pressure
+    www/medications_contraception.csv contraception
 
 ## Data model
 
@@ -35,7 +37,7 @@ by doing so, the score columns the app looks for in that domain's medication fil
 
 | column | meaning |
 | --- | --- |
-| `domain` | `depression`, `anxiety`, or `lipids` |
+| `domain` | `depression`, `anxiety`, `lipids`, `hypertension`, or `contraception` |
 | `id` | matches a column name in the medication file |
 | `label` | button text; `\|` marks the line break |
 | `icon` | space-separated Unicode code points, e.g. `2696 FE0F` |
@@ -60,6 +62,10 @@ has a toggle, plus:
 Scores are directional, not absolute: 5 on `weight` means least weight gain, 5 on
 `sexual` means fewest sexual side effects.
 
+Rows do not have to be drugs. Bright light therapy and dawn simulation sit in the
+depression table scored on the same considerations, since they compete with an
+antidepressant for the same decision.
+
 ### Subtypes
 
 Two domains split their medication list:
@@ -69,11 +75,24 @@ Two domains split their medication list:
   mostly the `evidence` score, because the difference between the two conditions
   is not which drugs exist but which have trial support. Buspirone scores 4 for
   GAD and 1 for panic; duloxetine 5 and 2; quetiapine 3 and 1.
+- **contraception** toggles between all methods (`all`) and daily pills only
+  (`pills`), defaulting to all. The all-methods view carries a generic combined
+  pill and a generic progestin-only pill so the category is represented without
+  thirteen near-identical rows; the pills view breaks those two open into
+  representative monophasic, triphasic, extended-cycle, continuous, and
+  progestin-only formulations.
+- **hypertension** toggles between stage 1 (`stage1`) and stage 2 (`stage2`),
+  defaulting to stage 2. The lists barely overlap: stage 1 is single agents, stage 2
+  is mostly single-pill combinations, since that is where treatment usually starts
+  at that pressure. Three single agents also appear under stage 2 for people in whom
+  combination therapy is the greater risk.
 - **lipids** toggles between `low`, `moderate`, and `high` intensity, defaulting
   to moderate, using the standard statin intensity bands. Statins appear in more
   than one tier at different doses, with the dose-dependent scores (muscle,
   glucose, cognition) differing between them. Non-statins sit in the tier matching
-  the LDL reduction they achieve on their own.
+  the LDL reduction they achieve on their own. There is deliberately no
+  "large LDL reduction" consideration, because the toggle already stratifies on
+  it and it would be near-constant within a tier.
 
 ## Scoring
 
@@ -112,8 +131,12 @@ cite, principally:
 - Unipolar major depression: choosing initial treatment
 - Generalized anxiety disorder in adults: management
 - Panic disorder in adults: treatment overview
+- Seasonal affective disorder: treatment
 - LDL-cholesterol-lowering therapy in the primary prevention of ASCVD
 - The 2026 ACC/AHA dyslipidemia guideline
+- Hypertension in adults: initial management, and the 2025 AHA/ACC blood pressure guideline
+- Contraception: counseling and selection; combined estrogen-progestin oral
+  contraceptives; progestin-only pills; and the US Medical Eligibility Criteria
 
 Pregnancy and breastfeeding scores come from general practice rather than those
 reviews and are the least well sourced values in the tables.
